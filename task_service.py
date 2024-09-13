@@ -15,12 +15,24 @@ def send_notification(message):
     except Exception as e:
         print("Error sending notification:", e)
 
+# Function to check user authentication
+def is_authenticated(username, password):
+    try:
+        response = requests.post('http://localhost:5001/login', json={"username": username, "password": password})
+        return response.status_code == 200
+    except Exception as e:
+        print("Error checking authentication:", e)
+        return False
+
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
     return jsonify(tasks)
 
 @app.route('/tasks', methods=['POST'])
 def add_task():
+    auth = request.authorization
+    if not auth or not is_authenticated(auth.username, auth.password):
+        return jsonify({"message": "Authentication required"}), 401
     task = request.json
     tasks.append(task)
     send_notification(f"Task created: {task['title']}")
@@ -28,6 +40,9 @@ def add_task():
 
 @app.route('/tasks/<int:task_id>', methods=['PUT'])
 def update_task(task_id):
+    auth = request.authorization
+    if not auth or not is_authenticated(auth.username, auth.password):
+        return jsonify({"message": "Authentication required"}), 401
     task = request.json
     tasks[task_id] = task
     send_notification(f"Task updated: {task['title']}")
@@ -35,6 +50,9 @@ def update_task(task_id):
 
 @app.route('/tasks/<int:task_id>', methods=['DELETE'])
 def delete_task(task_id):
+    auth = request.authorization
+    if not auth or not is_authenticated(auth.username, auth.password):
+        return jsonify({"message": "Authentication required"}), 401
     task = tasks.pop(task_id)
     send_notification(f"Task deleted: {task['title']}")
     return '', 204

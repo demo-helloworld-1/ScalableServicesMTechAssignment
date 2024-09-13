@@ -1,3 +1,4 @@
+import os
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -6,8 +7,8 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 # Email configuration
-EMAIL_ADDRESS = 'demo.helloworld.1@gmail.com'
-EMAIL_PASSWORD = 'ppbl uhzs tlaa bqgz'
+EMAIL_ADDRESS = os.getenv('EMAIL_ADDRESS')
+EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
 
 def send_email(subject, body, to):
     msg = MIMEMultipart()
@@ -30,7 +31,7 @@ def send_email(subject, body, to):
 def notify():
     notification = request.json
     print(f"Notification: {notification['message']}")
-    send_email("Task Notification", notification['message'], "recipient_email@example.com")
+    send_email(notification['subject'], notification['message'], notification['to'])
     return jsonify({"message": "Notification sent"}), 200
 
 if __name__ == '__main__':

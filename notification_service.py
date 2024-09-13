@@ -7,8 +7,8 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 # Email configuration
-EMAIL_ADDRESS = os.getenv('EMAIL_ADDRESS')
-EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
+EMAIL_ADDRESS = 'demo.helloworld.1@gmail.com'
+EMAIL_PASSWORD = 'ppbl uhzs tlaa bqgz'
 
 def send_email(subject, body, to):
     msg = MIMEMultipart()

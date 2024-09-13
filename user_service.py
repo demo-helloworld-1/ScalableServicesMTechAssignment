@@ -1,7 +1,9 @@
-import sqlite3
 from flask import Flask, request, jsonify
+from flask_cors import CORS
+import sqlite3
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS
 
 # Initialize SQLite database
 conn = sqlite3.connect('users.db', check_same_thread=False)

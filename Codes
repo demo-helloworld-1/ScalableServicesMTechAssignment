@@ -51,9 +51,9 @@ Gmail :App password: ppbl uhzs tlaa bqgz
 
 
 
-curl -X POST http://localhost:5001/register -H "Content-Type: application/json" -d '{"username": "testuser", "password": "testpass", "email": "recipient_email@example.com"}'
+curl -X POST http://localhost:5001/register -H "Content-Type: application/json" -d '{"username": "DemoHelloworld", "password": "testpass", "email": "dhanudhanudhanub@gmail.com"}'
 
-curl -u testuser:testpass -X POST http://localhost:5002/tasks -H "Content-Type: application/json" -d '{"title": "Buy groceries", "description": "Milk, Bread, Eggs"}'
+curl -u testuser:testpass -X POST http://localhost:5002/tasks -H "Content-Type: application/json" -d '{"title": "Do Washing Cloths", "description": "Dont forget to put the detergent"}'
 
 curl -u testuser:testpass -X PUT http://localhost:5002/tasks/0 -H "Content-Type: application/json" -d '{"title": "Buy groceries", "description": "Milk, Bread, Eggs, Butter"}'
 

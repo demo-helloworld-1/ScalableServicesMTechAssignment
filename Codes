@@ -1,0 +1,38 @@
+curl -X POST http://localhost:5001/register -H "Content-Type: application/json" -d '{"username": "testuser", "password": "testpass"}'
+
+
+curl -X POST http://localhost:5001/login -H "Content-Type: application/json" -d '{"username": "testuser", "password": "testpass"}'
+
+
+
+curl -X POST http://localhost:5002/tasks -H "Content-Type: application/json" -d '{"title": "Buy groceries", "description": "Milk, Bread, Eggs"}'
+
+
+curl http://localhost:5002/tasks
+
+
+curl -X PUT http://localhost:5002/tasks/0 -H "Content-Type: application/json" -d '{"title": "Buy groceries", "description": "Milk, Bread, Eggs, Butter"}'
+
+curl -X DELETE http://localhost:5002/tasks/0
+
+
+curl -X POST http://localhost:5003/notify -H "Content-Type: application/json" -d '{"message": "Task created"}'
+
+
+
+
+import requests
+
+# Add this function to send notifications
+def send_notification(message):
+    requests.post('http://localhost:5003/notify', json={"message": message})
+
+# Modify the add_task function to send a notification
+@app.route('/tasks', methods=['POST'])
+def add_task():
+    task = request.json
+    tasks.append(task)
+    send_notification("Task created: " + task['title'])
+    return jsonify(task), 201
+
+# Similarly, modify update_task and delete_task functions to send notifications

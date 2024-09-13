@@ -36,3 +36,8 @@ def add_task():
     return jsonify(task), 201
 
 # Similarly, modify update_task and delete_task functions to send notifications
+
+
+
+
+curl -u testuser:testpass -X PUT http://localhost:5002/tasks/0 -H "Content-Type: application/json" -d '{"title": "Buy groceries", "description": "Milk, Bread, Eggs, Butter"}'

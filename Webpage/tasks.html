@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Tasks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+        }
+        .task {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .task:last-child {
+            border-bottom: none;
+        }
+        .task-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .task-buttons button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .task-buttons .update {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .task-buttons .delete {
+            background-color: #dc3545;
+            color: #fff;
+        }
+        .add-task {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .add-task input {
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .add-task button {
+            padding: 8px 16px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Your Tasks</h2>
+        <div class="add-task">
+            <input type="text" id="new-task-title" placeholder="Task Title">
+            <input type="text" id="new-task-desc" placeholder="Task Description">
+            <button onclick="addTask()">Add Task</button>
+        </div>
+        <div id="tasks"></div>
+    </div>
+
+    <script>
+        async function fetchTasks() {
+            const response = await fetch('http://localhost:5002/tasks', {
+                method: 'GET'
+            });
+            const tasks = await response.json();
+            const tasksContainer = document.getElementById('tasks');
+            tasksContainer.innerHTML = '';
+            tasks.forEach(task => {
+                const taskElement = document.createElement('div');
+                taskElement.className = 'task';
+                taskElement.innerHTML = `
+                    <div>
+                        <strong>${task[1]}</strong>
+                        <p>${task[2]}</p>
+                    </div>
+                    <div class="task-buttons">
+                        <button class="update" onclick="updateTask(${task[0]})">Update</button>
+                        <button class="delete" onclick="deleteTask(${task[0]})">Delete</button>
+                    </div>
+                `;
+                tasksContainer.appendChild(taskElement);
+            });
+        }
+
+        async function addTask() {
+            const title = document.getElementById('new-task-title').value;
+            const description = document.getElementById('new-task-desc').value;
+            const response = await fetch('http://localhost:5002/tasks', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title, description })
+            });
+            if (response.status === 201) {
+                alert("Task added successfully!");
+                fetchTasks();
+            } else {
+                const result = await response.json();
+                alert(result.message);
+            }
+        }
+
+        async function updateTask(taskId) {
+            const newTitle = prompt("Enter new title:");
+            const newDescription = prompt("Enter new description:");
+            if (newTitle && newDescription) {
+                const response = await fetch(`http://localhost:5002/tasks/${taskId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ title: newTitle, description: newDescription })
+                });
+                if (response.status === 200) {
+                    alert("Task updated successfully!");
+                    fetchTasks();
+                } else {
+                    const result = await response.json();
+                    alert(result.message);
+                }
+            }
+        }
+
+        async function deleteTask(taskId) {
+            const response = await fetch(`http://localhost:5002/tasks/${taskId}`, {
+                method: 'DELETE'
+            });
+            if (response.status === 204) {
+                alert("Task deleted successfully!");
+                fetchTasks();
+            } else {
+                const result = await response.json();
+                alert(result.message);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchTasks);
+    </script>
+</body>
+</html>

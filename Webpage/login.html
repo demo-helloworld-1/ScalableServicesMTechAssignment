@@ -80,6 +80,9 @@
             const result = await response.json();
             if (response.status === 200) {
                 alert("Login successful!");
+                localStorage.setItem('username', username);
+                localStorage.setItem('password', password);
+                window.location.href = 'tasks.html';
             } else {
                 alert(result.message);
             }

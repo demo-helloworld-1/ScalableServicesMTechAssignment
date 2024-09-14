@@ -1,3 +1,4 @@
+Python Services:
 python user_service.py
 python task_service.py 
 python notification_service.py
@@ -15,4 +16,30 @@ docker rmi imageid
 docker build -t image-name .
 docker run -p localpost:containerport image-name
 
-minikube Commands
+how to run the Services in Docker:
+
+Build:
+# Build user service
+docker build -t user-service .
+
+# Build task service
+docker build -t task-service .
+
+# Build notification service
+docker build -t notification-service .
+
+Network:
+docker network create app-network
+
+Containers:
+# Run user service container
+docker run -d --name user-service --network app-network -p 5001:5001 user-service
+
+# Run task service container
+docker run -d --name task-service --network app-network -p 5002:5002 task-service
+
+# Run notification service container
+docker run -d --name notification-service --network app-network -p 5003:5003 notification-service
+
+
+

@@ -43,3 +43,7 @@ docker run -d --name notification-service --network app-network -p 5003:5003 not
 
 
 
+# Apply user-service deployment
+kubectl apply -f user-service-deployment.yaml
+kubectl apply -f task-service-deployment.yaml
+kubectl apply -f notification-service-deployment.yaml

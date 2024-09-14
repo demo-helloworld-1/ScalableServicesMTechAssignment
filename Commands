@@ -1,0 +1,18 @@
+python user_service.py
+python task_service.py 
+python notification_service.py
+
+
+WebPage:
+python -m http.server 8000
+
+Docker Commands
+docker images
+docker ps
+docker ps -a
+docker rm container_id
+docker rmi imageid
+docker build -t image-name .
+docker run -p localpost:containerport image-name
+
+minikube Commands

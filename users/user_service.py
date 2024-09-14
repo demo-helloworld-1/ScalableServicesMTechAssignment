@@ -39,5 +39,10 @@ def login():
         return jsonify({"message": "Login successful", "email": result[0]})
     return jsonify({"message": "Invalid credentials"}), 401
 
+# Add the simple endpoint here
+@app.route('/ping', methods=['GET'])
+def ping():
+    return jsonify({"message": "pong"}), 200
+
 if __name__ == '__main__':
-    app.run(port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5001,debug=True)
